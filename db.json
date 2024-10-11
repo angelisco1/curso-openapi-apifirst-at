@@ -45,6 +45,34 @@
       "contenido": "Esto es alto secreto...",
       "fechaAlta": "2024-06-10",
       "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    },
+    {
+      "id": "da0c8fbe-c844-46a5-a1b5-35c23ad1a142",
+      "titulo": "Informe secreto",
+      "contenido": "Esto es alto secreto...",
+      "fechaAlta": "2024-06-10",
+      "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    },
+    {
+      "id": "19728680-fa78-4679-bdcf-2a6302158535",
+      "titulo": "Prueba desde RestAssured",
+      "contenido": "Contenido",
+      "fechaAlta": "2001-12-02",
+      "usuarioId": "f36c40c5-e040-47ee-8833-d490bb52f0ef"
+    },
+    {
+      "id": "7101289c-38ce-40f8-83dc-055e9030abda",
+      "titulo": "Prueba desde RestAssured",
+      "contenido": "Contenido",
+      "fechaAlta": "2001-12-02",
+      "usuarioId": "f36c40c5-e040-47ee-8833-d490bb52f0ef"
+    },
+    {
+      "id": "88b615de-feb0-42cd-8e00-bd14bf137482",
+      "titulo": "Prueba desde RestAssured",
+      "contenido": "Contenido",
+      "fechaAlta": "2001-12-02",
+      "usuarioId": "f36c40c5-e040-47ee-8833-d490bb52f0ef"
     }
   ]
 }

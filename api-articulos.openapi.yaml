@@ -401,6 +401,7 @@ components:
               format: date
             usuarioId:
               $ref: "#/components/schemas/UsuarioId"
+          # additionalProperties: false
           required:
             - titulo
             - contenido
@@ -414,6 +415,7 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/ArticuloId"
+          # additionalProperties: false
           required:
             - id
         - $ref: "#/components/schemas/ArticuloBase"
@@ -574,11 +576,11 @@ components:
 
     Error1:
       description: El campo no cumple la validación
-      value: { error: "El campo título tiene una longitud mayor a 40" }
+      value: { error: "El campo titulo tiene una longitud mayor a 40" }
 
     Error2:
       description: Falta un campo por enviar
-      value: { error: "No se ha enviado el campo título" }
+      value: { error: "No se ha enviado el campo titulo" }
 
   securitySchemes:
     Oauth2:

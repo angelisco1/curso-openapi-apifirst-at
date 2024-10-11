@@ -181,11 +181,16 @@ appExpress.post('/usuarios/:id/articulos', async (req, res) => {
     return res.status(400).json(error)
   }
 
+  console.log(body)
+
   try {
     await axios.get('http://localhost:3000/usuarios/' + id)
   } catch (err) {
+    console.log({ err })
     return res.status(404).json()
   }
+
+  console.log(body)
 
   const error = validateBody(body)
   if (error) {

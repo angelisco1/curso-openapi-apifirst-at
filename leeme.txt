@@ -1,0 +1,13 @@
+Al descargar el proyecto, hay que instalar las dependencias de este con el comando:
+
+----
+npm install
+----
+
+o
+
+----
+npm i
+----
+
+Aseguraos de estar dentro de la carpeta del proyecto, hay que lanzarlo en la ruta donde se encuentra el archivo package.json.
