@@ -1,0 +1,598 @@
+openapi: 3.0.2
+info:
+  title: API de artículos
+  x-logo:
+    url: https://imgs.search.brave.com/AV9EbhCvkSSBvACS5oyz2x92hpH_G6VmUumlauA9Ha4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bW9zLmNtcy5mdXR1/cmVjZG4ubmV0L3Vh/enc2Z0ZRdUVDMjlt/eE1NNTVUcGItMzIw/LTgwLmpwZw
+  version: 1.0.0
+  #description: Una API de prueba
+  description: |-
+    # Uso
+    Tienes que entrar al portal y **suscribirte a la API**: [ir al portal](http://portal-apis.com/prueba)
+
+    ## Planes
+    - Oro: *1€/1000request*
+    - Plata: *2€/1000request*
+
+  contact:
+    name: Charles Falco
+    email: cfalco@gmail.com
+    url: http://linkedin.com/charles-falco
+  license:
+    name: MIT
+    url: http://mit.com
+
+servers:
+  - description: Servidor local
+    url: http://192.168.0.17:8080
+  - description: Servidor mock
+    url: http://localhost:4010
+  - description: Servidor de desarrollo
+    url: http://development.miapi.com/{version}
+    variables:
+      version:
+        default: v2
+        enum:
+          - v1
+          - v2
+
+tags:
+  - name: usuarios
+    description: Peticiones relacionadas con usuarios
+  - name: articulos
+    description: Peticiones relacionadas con artículos
+
+paths:
+  /usuarios:
+    get:
+      summary: Obtiene los usuarios
+      description: Obtiene los usuarios, por defecto una lista de 10 usuarios, y puedes utilizar los parámetros page y limit para traer más usuarios y otras páginas.
+      operationId: getUsuarios
+      tags:
+        - usuarios
+
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+
+      responses:
+        "200":
+          description: Obtiene la lista de usuarios
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuarios"
+              examples:
+                "Lista de usuarios":
+                  $ref: "#/components/examples/ListaUsuarios"
+                "Lista vacía":
+                  $ref: "#/components/examples/ListaVacia"
+      # security:
+      #   - Oauth2:
+      #       - read:user
+
+    post:
+      summary: Crea un usuario
+      description: Crea un usuario
+      operationId: createUsuario
+      tags:
+        - usuarios
+
+      requestBody:
+        description: Datos del usuario a crear
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioBase"
+            examples:
+              "Usuario a crear":
+                $ref: "#/components/examples/UsuarioBase"
+
+      responses:
+        "201":
+          description: El usuario se ha creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+              examples:
+                "Usuario":
+                  $ref: "#/components/examples/Usuario"
+
+          links:
+            "Ver usuario creado":
+              operationId: getUsuario
+              parameters:
+                id: $response.body#/id
+
+        "400":
+          $ref: "#/components/responses/Error400"
+
+        "401":
+          $ref: "#/components/responses/Error401"
+
+        "403":
+          $ref: "#/components/responses/Error403"
+
+      # security:
+      #   - Oauth2:
+      #       - write:user
+
+  /usuarios/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          $ref: "#/components/schemas/UsuarioId"
+        required: true
+
+    get:
+      summary: Obtiene un usuario
+      description: Obtiene un usuario por su identificador
+      operationId: getUsuario
+      tags:
+        - usuarios
+
+      responses:
+        "200":
+          description: Obtiene un usuario
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+              examples:
+                "Usuario":
+                  $ref: "#/components/examples/Usuario"
+
+        "404":
+          $ref: "#/components/responses/Error404"
+
+      # security:
+      #   - BasicAuth: []
+
+  /articulos/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ArticuloId"
+
+    get:
+      summary: Obtiene un artículo
+      description: Obtiene un artículo por su identificador
+      operationId: getArticulo
+      tags:
+        - articulos
+
+      responses:
+        "200":
+          description: Obtiene un artículo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Articulo"
+              examples:
+                "Un artículo":
+                  $ref: "#/components/examples/Articulo"
+        "400":
+          $ref: "#/components/responses/Error400"
+
+        "404":
+          $ref: "#/components/responses/Error404"
+
+      # security:
+      #   - Oauth2: [read:article]
+
+    patch:
+      summary: Actualiza un artículo
+      description: Actualiza un artículo por su identificador
+      operationId: updateArticulo
+      tags:
+        - articulos
+
+      requestBody:
+        description: Datos a cambiar del artículo
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticuloParcial"
+            examples:
+              "Actualizar título":
+                $ref: "#/components/examples/ArticuloParcial1"
+              "Actualizar título y contenido":
+                $ref: "#/components/examples/ArticuloParcial2"
+
+      responses:
+        "200":
+          description: Se ha modificado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Articulo"
+              examples:
+                "Un artículo":
+                  $ref: "#/components/examples/Articulo"
+
+        "400":
+          $ref: "#/components/responses/Error400"
+
+        "404":
+          $ref: "#/components/responses/Error404"
+
+      # security:
+      #   - Oauth2: [write:article]
+
+  /usuarios/{id}/articulos:
+    parameters:
+      - $ref: "#/components/parameters/UsuarioId"
+
+    get:
+      summary: Obtiene los artículos de un usuario
+      description: Obtiene los artículos de un usuario
+      operationId: getArticulosDeUsuario
+      tags:
+        - articulos
+
+      responses:
+        "200":
+          description: Obtiene un artículo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Articulos"
+              examples:
+                "Lista de artículos":
+                  $ref: "#/components/examples/ListaArticulos"
+                "Lista vacía":
+                  $ref: "#/components/examples/ListaVacia"
+
+        "404":
+          $ref: "#/components/responses/Error404"
+
+      # security:
+      #   - Oauth2: [read:article]
+
+    post:
+      summary: Crea un artículo
+      description: Crea un artículo
+      operationId: createArticulo
+      tags:
+        - articulos
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticuloBase"
+            examples:
+              "Articulo a crear":
+                $ref: "#/components/examples/ArticuloBase"
+
+      responses:
+        "201":
+          description: Artículo creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Articulo"
+              examples:
+                "Un artículo":
+                  $ref: "#/components/examples/Articulo"
+
+        "400":
+          $ref: "#/components/responses/Error400"
+
+        "401":
+          $ref: "#/components/responses/Error401"
+
+        "403":
+          $ref: "#/components/responses/Error403"
+
+        "404":
+          $ref: "#/components/responses/Error404"
+
+      # security:
+      #   - Oauth2: [write:article]
+
+components:
+  schemas:
+    ArticuloId:
+      title: ArticuloId
+      type: string
+      format: uuid
+
+    UsuarioId:
+      title: UsuarioId
+      type: string
+      format: uuid
+
+    UsuarioBase:
+      title: UsuarioBase
+      type: object
+      properties:
+        nombre:
+          type: string
+          x-faker:
+            random.arrayElement:
+              [["Ángel", "Sara", "Charly", "Mike", "Pedro", "Alicia"]]
+        email:
+          type: string
+          format: email
+        estaActivo:
+          type: boolean
+        numVotos:
+          type: integer
+        ciudad:
+          type: string
+          enum:
+            - Barcelona
+            - Madrid
+            - Valencia
+            - Galicia
+          nullable: true
+      required:
+        - nombre
+        - email
+        - estaActivo
+        - numVotos
+
+    Usuario:
+      title: Usuario
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/UsuarioId"
+          required:
+            - id
+        - $ref: "#/components/schemas/UsuarioBase"
+
+    Usuarios:
+      title: Usuarios
+      type: array
+      items:
+        $ref: "#/components/schemas/Usuario"
+
+    Titulo:
+      title: Titulo
+      type: object
+      properties:
+        titulo:
+          type: string
+          x-faker:
+            random.arrayElement:
+              [["Robo de joyas", "Posible estafa piramidal", "Infidelidad"]]
+
+    Contenido:
+      title: Contenido
+      type: object
+      properties:
+        contenido:
+          type: string
+
+    ArticuloParcial:
+      title: ArticuloParcial
+      anyOf:
+        - $ref: "#/components/schemas/Titulo"
+        - $ref: "#/components/schemas/Contenido"
+
+    # ArticuloParcialForma2:
+    #   title: ArticuloParcial
+    #   type: object
+    #   properties:
+    #     titulo:
+    #       type: string
+    #     contenido:
+    #       type: string
+
+    ArticuloBase:
+      title: ArticuloBase
+      allOf:
+        - $ref: "#/components/schemas/Titulo"
+        - $ref: "#/components/schemas/Contenido"
+        - type: object
+          properties:
+            fechaAlta:
+              type: string
+              format: date
+            usuarioId:
+              $ref: "#/components/schemas/UsuarioId"
+          required:
+            - titulo
+            - contenido
+            - fechaAlta
+            - usuarioId
+
+    Articulo:
+      title: Articulo
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/ArticuloId"
+          required:
+            - id
+        - $ref: "#/components/schemas/ArticuloBase"
+
+    Articulos:
+      title: Articulos
+      type: array
+      items:
+        $ref: "#/components/schemas/Articulo"
+
+    Error:
+      title: Error
+      type: object
+      properties:
+        error:
+          type: string
+      additionalProperties: false
+
+  parameters:
+    ArticuloId:
+      name: id
+      in: path
+      schema:
+        $ref: "#/components/schemas/ArticuloId"
+      required: true
+
+    UsuarioId:
+      name: id
+      in: path
+      schema:
+        $ref: "#/components/schemas/UsuarioId"
+      required: true
+
+  responses:
+    Error400:
+      description: La petición está mal
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            "Error de validación":
+              $ref: "#/components/examples/Error1"
+            "Falta un campo":
+              $ref: "#/components/examples/Error2"
+
+    Error401:
+      description: Necesitas estar autenticado
+
+    Error403:
+      description: No tienes permiso para realizar esa acción
+
+    Error404:
+      description: No se ha encontrado
+
+  examples:
+    UsuarioBase:
+      description: Datos del usuario a crear
+      value:
+        {
+          nombre: "Ángel",
+          email: "angel@gmail.com",
+          estaActivo: true,
+          numVotos: 1,
+          ciudad: Madrid,
+        }
+
+    Usuario:
+      description: Un usuario
+      value:
+        {
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          nombre: "Ángel",
+          email: "angel@gmail.com",
+          estaActivo: true,
+          numVotos: 1,
+          ciudad: Madrid,
+        }
+
+    ListaUsuarios:
+      description: Lista de usuarios
+      value:
+        [
+          {
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            nombre: "Ángel",
+            email: "angel@gmail.com",
+            estaActivo: true,
+            numVotos: 1,
+            ciudad: Madrid,
+          },
+          {
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            nombre: "Adrian",
+            email: "adrian@gmail.com",
+            estaActivo: true,
+            numVotos: 3,
+            ciudad: Madrid,
+          },
+        ]
+
+    ListaVacia:
+      description: Lista sin usuarios
+      value: []
+
+    ArticuloParcial1:
+      description: Actualizar título
+      value: { titulo: Robo de joyas }
+
+    ArticuloParcial2:
+      description: Actualizar título y contenido
+      value:
+        {
+          titulo: "Robo de joyas",
+          contenido: "Se han robado varias joyas en la casa...",
+        }
+
+    ArticuloBase:
+      description: Crear un artículo
+      value:
+        {
+          titulo: "Robo de joyas",
+          contenido: "Se han robado varias joyas en la casa...",
+          fechaAlta: "2024-06-12",
+          usuarioId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        }
+
+    Articulo:
+      description: Un artículo
+      value:
+        {
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa4",
+          titulo: "Robo de joyas",
+          contenido: "Se han robado varias joyas en la casa...",
+          fechaAlta: "2024-06-12",
+          usuarioId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        }
+
+    ListaArticulos:
+      description: Lista de artículos
+      value:
+        [
+          {
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa4",
+            titulo: "Robo de joyas",
+            contenido: "Se han robado varias joyas en la casa...",
+            fechaAlta: "2024-06-12",
+            usuarioId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          },
+          {
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa1",
+            titulo: "Robo del tractor amarillo",
+            contenido: "Se ha robado el tractor amarillo de...",
+            fechaAlta: "2023-03-10",
+            usuarioId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          },
+        ]
+
+    Error1:
+      description: El campo no cumple la validación
+      value: { error: "El campo título tiene una longitud mayor a 40" }
+
+    Error2:
+      description: Falta un campo por enviar
+      value: { error: "No se ha enviado el campo título" }
+
+  securitySchemes:
+    Oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://authserver.miapi.com/auth
+          tokenUrl: http://authserver.miapi.com/token
+          scopes:
+            write:user: Crear y actualizar usuarios
+            read:user: Listar usuarios
+            delete:user: Eliminar usuarios
+            write:article: Crear y actualizar artículos
+            read:article: Listar artículos
+    BasicAuth:
+      type: http
+      scheme: basic

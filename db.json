@@ -1,0 +1,50 @@
+{
+  "usuarios": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "nombre": "Ángel",
+      "email": "angel@gmail.com",
+      "estaActivo": true,
+      "numVotos": 1,
+      "ciudad": "Madrid"
+    },
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+      "nombre": "Adrian",
+      "email": "adrian@gmail.com",
+      "estaActivo": true,
+      "numVotos": 2,
+      "ciudad": "Barcelona"
+    }
+  ],
+  "articulos": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa4",
+      "titulo": "Nuevo título",
+      "contenido": "Nuevo contenido",
+      "fechaAlta": "2024-06-12",
+      "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    },
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa5",
+      "titulo": "Atraco por la calle",
+      "contenido": "Un conocido con pasamontañas me a atracado por la calle...",
+      "fechaAlta": "2024-06-10",
+      "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    },
+    {
+      "id": "954d9656-c071-4909-822f-69d90ec5e41b",
+      "titulo": "Atraco por la calle 2",
+      "contenido": "Un conocido con pasamontañas me a atracado por la calle 2...",
+      "fechaAlta": "2024-06-14",
+      "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    },
+    {
+      "id": "f36c40c5-e040-47ee-8833-d490bb52f0ef",
+      "titulo": "Informe secreto",
+      "contenido": "Esto es alto secreto...",
+      "fechaAlta": "2024-06-10",
+      "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    }
+  ]
+}

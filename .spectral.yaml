@@ -1,0 +1,21 @@
+extends:
+  - spectral:oas
+rules:
+  tag-description:
+    description: Please provide a description for each tag.
+    severity: error
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+
+  adidas-paths-kebab-case:
+    description: All YAML/JSON paths MUST follow kebab-case
+    severity: warn
+    recommended: true
+    message: "{{property}} is not kebab-case: {{error}}"
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: "^\/([a-z0-9]+(-[a-z0-9]+)*)?(\/[a-z0-9]+(-[a-z0-9]+)*|\/{.+})*$" # doesn't allow /asasd{asdas}sadas pattern or not closed braces

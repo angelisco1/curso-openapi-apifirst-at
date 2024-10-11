@@ -1,0 +1,11 @@
+theme:
+  openapi:
+    theme:
+      sidebar:
+        backgroundColor: "#FABADA"
+      rightPanel:
+        textColor: "#000000"
+        backgroundColor: "#FABADA"
+      typography:
+        links:
+          color: "yellowgreen"
